@@ -1,10 +1,4 @@
-/* body {
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 1.5rem;
-    background-color: darkslategray;
-    margin: 0;
-    padding: 0;
-}
+
 
 .board {
     border: 1px solid red;
@@ -31,13 +25,14 @@
     box-sizing: border-box;
   }
 
-  * {
-    margin: 0;
-  }
-
   body {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 1.5rem;
+    background-color: darkslategray;
+    margin: 0;
+    padding: 0;
     line-height: 1.5;
-    -webkit-font-smoothing: antialiased;
+    /* -webkit-font-smoothing: antialiased; */
   }
 
   img, picture, video, canvas, svg {
@@ -72,14 +67,10 @@
 
 .game-container {
     text-align: center;
-}
-
-.board {
+    /* border: 1px solid red; */
+    width: 300px;
     display: grid;
     grid-template-columns: repeat(3, 100px);
-    grid-template-rows: repeat(3, 100px);
-    gap: 5px;
-    margin: 20px auto;
 }
 
 .cell {
