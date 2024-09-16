@@ -4,6 +4,10 @@ const createGameBoard = (() => {
     const player1Score = document.querySelector("#player1");
     const player2Score = document.querySelector("#player2");
     const gameMessage = document.querySelector(".game-message");
+    const btn_continue = document.querySelector(".continue");
+    const gameEnd = document.querySelector(".game-end");
+    const gameEndMsg = document.querySelector(".game-end-msg");
+    const btn_reset = document.querySelector("#reset");
     const form = document.querySelector(".form");
     const btn_name = document.querySelector(".nameButton");
 
@@ -33,7 +37,7 @@ const createGameBoard = (() => {
         }
     }
 
-    const getGameBoard = () => {                            //"showGameBoard"
+    const getGameBoard = () => {                          //"showGameBoard"
         gameCont.innerHTML = "";
         board.forEach((item, index) => {                  //need to reference player.marker here
             const cell = document.createElement("div");
@@ -69,7 +73,6 @@ const createGameBoard = (() => {
     }
 
     const checkWin = () => {
-
         if  ((board[0] !== " " && board[0] == board[1] && board[1] == board[2] ) ||
         (board[3] !== " " && board[3] == board[4] && board[4] == board[5] ) ||
         (board[6] !== " " && board[6] == board[7] && board[7] == board[8] ) ||
@@ -81,11 +84,15 @@ const createGameBoard = (() => {
             
             if (activePlayer == 0) {
                 message(player1.name + " wins this round!");
+                gameEndMsg.textContent = player1.name + " wins this round!"
+                gameEnd.showModal();
                 player1.score++;
             }
     
             else if (activePlayer == 1) {
                 message(player2.name + " wins this round!");
+                gameEndMsg.textContent = player2.name + " wins this round!"
+                gameEnd.showModal();
                 player2.score++;
             }
 
@@ -97,11 +104,12 @@ const createGameBoard = (() => {
 
         else if (!board.includes(" ")) {
             message("Tie!");
+            gameEndMsg.textContent = "It's a tie!"
+            gameEnd.showModal();
             round++;
             scoreboard();
             initializeGameBoard();
             getGameBoard();
-
         }
 
         else {
@@ -118,6 +126,19 @@ const createGameBoard = (() => {
     const message = (msg) => {
         gameMessage.textContent = msg;
     }
+
+    btn_continue.addEventListener("click", () => {
+        gameEnd.close();
+    });
+
+    btn_reset.addEventListener("click", () => {
+        player1.score = 0;
+        player2.score = 0;
+        round = 1;
+        scoreboard();
+        initializeGameBoard();
+        getGameBoard();
+    });
 
     return {initializeGameBoard, getGameBoard}
 })();
