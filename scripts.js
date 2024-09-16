@@ -1,17 +1,18 @@
 const createGameBoard = (() => {
     const gameCont = document.querySelector(".game-container");
-    const btn_name = document.querySelector(".nameButton");
-    const namePlayer1 = document.querySelector("#player1");
-    const namePlayer2 = document.querySelector("#player2");
+    const roundScore = document.querySelector("#round");
+    const player1Score = document.querySelector("#player1");
+    const player2Score = document.querySelector("#player2");
+    const gameMessage = document.querySelector(".game-message");
     const form = document.querySelector(".form");
+    const btn_name = document.querySelector(".nameButton");
 
     let board = new Array(9);
     let activePlayer = 0; //Player1 starts if true
-    let round =  0;
-    let message = "";
-    // let gameOver = false;
+    let round =  1;
+    let gameOver = false;
 
-    // //Player factory, need to update to prompt for name in a form.
+    //Player factory, need to update to prompt for name in a form.
     const Player = (name, score) => {
         return {name, score};
     }
@@ -20,23 +21,20 @@ const createGameBoard = (() => {
     player2 = Player("Player 2", 0);
 
     const initializeGameBoard = () => {                     //"startGameBoard"
+        scoreboard();
         activePlayer = 0;
         marker = "X";
-        message = "It is " + player1.name + "'s turn.";
+        message("It is " + player1.name + "'s turn.");
+        gameOver = false;
         
         board = new Array(9);
         for (let i = 0; i < board.length; i++) {
-            board[i] = "-";
+            board[i] = " ";
         }
-    };
-
-    const refreshGameBoard = function () {
-        gameCont.innerHTML = "";
-        getGameBoard();
-      };
+    }
 
     const getGameBoard = () => {                            //"showGameBoard"
-        console.log("active player: " + activePlayer);
+        gameCont.innerHTML = "";
         board.forEach((item, index) => {                  //need to reference player.marker here
             const cell = document.createElement("div");
             cell.classList.add('cell');
@@ -49,9 +47,9 @@ const createGameBoard = (() => {
 
     const addMarker = (e) => {                               //"scrnUpdate"
             let id = e.target.id;
-            if (board[id] == "-") {
+            if (board[id] == " ") {
                 board[id] = marker;
-                refreshGameBoard();
+                getGameBoard();
                 checkWin();
             }
     }
@@ -60,54 +58,68 @@ const createGameBoard = (() => {
         if (activePlayer == 0) {
             activePlayer = 1
             marker = "O";
+            message("It is " + player2.name + "'s turn.");
         }
 
         else if (activePlayer == 1) {
             activePlayer = 0
             marker = "X"
-        }
-    }
-
-    const winRound = () => {
-        if (activePlayer == 0) {
-            player1.score++;
-        }
-
-        else if (activePlayer == 1) {
-            player2.score++;
+            message("It is " + player1.name + "'s turn.");
         }
     }
 
     const checkWin = () => {
-        if  ((board[0] !== "-" && board[0] == board[1] && board[1] == board[2] ) ||
-        (board[3] !== "-" && board[3] == board[4] && board[4] == board[5] ) ||
-        (board[6] !== "-" && board[6] == board[7] && board[7] == board[8] ) ||
-        (board[0] !== "-" && board[0] == board[3] && board[3] == board[6] ) ||
-        (board[1] !== "-" && board[1] == board[4] && board[4] == board[7] ) ||
-        (board[2] !== "-" && board[2] == board[5] && board[5] == board[8] ) ||
-        (board[0] !== "-" && board[0] == board[4] && board[4] == board[8] ) ||
-        (board[2] !== "-" && board[2] == board[4] && board[4] == board[6] )) {
-            winRound();
-            console.log("Games over by win");
-            initializeGameBoard();
+
+        if  ((board[0] !== " " && board[0] == board[1] && board[1] == board[2] ) ||
+        (board[3] !== " " && board[3] == board[4] && board[4] == board[5] ) ||
+        (board[6] !== " " && board[6] == board[7] && board[7] == board[8] ) ||
+        (board[0] !== " " && board[0] == board[3] && board[3] == board[6] ) ||
+        (board[1] !== " " && board[1] == board[4] && board[4] == board[7] ) ||
+        (board[2] !== " " && board[2] == board[5] && board[5] == board[8] ) ||
+        (board[0] !== " " && board[0] == board[4] && board[4] == board[8] ) ||
+        (board[2] !== " " && board[2] == board[4] && board[4] == board[6] )) {
+            
+            if (activePlayer == 0) {
+                message(player1.name + " wins this round!");
+                player1.score++;
+            }
+    
+            else if (activePlayer == 1) {
+                message(player2.name + " wins this round!");
+                player2.score++;
+            }
+
             round++;
+            scoreboard();
+            initializeGameBoard();
+            getGameBoard();
         }
 
-        else if (!board.includes("-")) {
-            //Tie: send message and restart board for new round
-            console.log("Games over by tie");
-            initializeGameBoard();
+        else if (!board.includes(" ")) {
+            message("Tie!");
             round++;
+            scoreboard();
+            initializeGameBoard();
+            getGameBoard();
+
         }
 
         else {
-            //No win or tie yet, switch players and continue.
             switchPlayer();
         }
     };
 
-    return {initializeGameBoard, getGameBoard}
+    const scoreboard = () => {
+        roundScore.textContent = "Round: " + round;
+        player1Score.textContent = player1.name + ": " + player1.score;
+        player2Score.textContent = player2.name + ": " + player2.score;
+    }
 
+    const message = (msg) => {
+        gameMessage.textContent = msg;
+    }
+
+    return {initializeGameBoard, getGameBoard}
 })();
 
 createGameBoard.initializeGameBoard();
@@ -132,7 +144,7 @@ createGameBoard.getGameBoard();
 //     };
 
 //     const addMarker = (marker, space) => {
-//         if (board[space] === "-") {
+//         if (board[space] === " ") {
 //             board[space] = marker;
 //             return true;
 //         }
@@ -192,18 +204,18 @@ createGameBoard.getGameBoard();
 //     }
 
 //     const checkWin = (board, marker) => {
-//         if  ((board[0] !== "-" && board[0] == board[1] && board[1] == board[2] ) ||
-//         (board[3] !== "-" && board[3] == board[4] && board[4] == board[5] ) ||
-//         (board[6] !== "-" && board[6] == board[7] && board[7] == board[8] ) ||
-//         (board[0] !== "-" && board[0] == board[3] && board[3] == board[6] ) ||
-//         (board[1] !== "-" && board[1] == board[4] && board[4] == board[7] ) ||
-//         (board[2] !== "-" && board[2] == board[5] && board[5] == board[8] ) ||
-//         (board[0] !== "-" && board[0] == board[4] && board[4] == board[8] ) ||
-//         (board[2] !== "-" && board[2] == board[4] && board[4] == board[6] )) {
+//         if  ((board[0] !== " " && board[0] == board[1] && board[1] == board[2] ) ||
+//         (board[3] !== " " && board[3] == board[4] && board[4] == board[5] ) ||
+//         (board[6] !== " " && board[6] == board[7] && board[7] == board[8] ) ||
+//         (board[0] !== " " && board[0] == board[3] && board[3] == board[6] ) ||
+//         (board[1] !== " " && board[1] == board[4] && board[4] == board[7] ) ||
+//         (board[2] !== " " && board[2] == board[5] && board[5] == board[8] ) ||
+//         (board[0] !== " " && board[0] == board[4] && board[4] == board[8] ) ||
+//         (board[2] !== " " && board[2] == board[4] && board[4] == board[6] )) {
 //             return true;
 //         }
 
-//         else if (!board.includes("-")) {
+//         else if (!board.includes(" ")) {
 //             return true;
 //         }
 
@@ -213,7 +225,7 @@ createGameBoard.getGameBoard();
 //     };
 
 //     const checkTie = (board, marker) => {
-//         if (!board.includes("-")) {
+//         if (!board.includes(" ")) {
 //             return true;
 //         }
 //     };
