@@ -9,11 +9,20 @@
 
     <body>
         <h1>Tic-Tac-Toe</h1>
+        
+        <div class="scoreboard-cont">
+            <div class="scoreboard-top">
+                <div class="marker">X</div>
+                <div id="scoreboard">SCOREBOARD</div>
+                <div class="marker">O</div>
+            </div>
 
-        <div scoreboard> Scoreboard
-            <div id="round">Round: 1</div>
-            <p class="player-name" id="player1">Player 1: 0</p>
-            <p class="player-name" id="player2">Player 2: 0</p>
+            <div class="scoreboard-bottom">
+                <div class="player-name" id="player1">Player 1: 0</div>
+                <div id="round">Round: 1</div>
+                <div class="player-name" id="player2">Player 2: 0</div>
+            </div>
+
         </div>
 
         <div class="game-message"></div>
@@ -30,17 +39,19 @@
 
         <dialog class="name-change">
             <form class="name-form" method="dialog">
-                <legend>Change Player Names</legend>
+                <legend>CHANGE PLAYER NAMES</legend>
                 <br>
-                <label for="player1-name">Player 1:</label>
+                <label for="player1-name">[X] Player 1 :</label>
                 <input type="text" id="player1-name"/>
                 <br>
-                <label for="player2-name">Player 2:</label>
+                <label for="player2-name">[O] Player 2 :</label>
                 <input type="text" id="player2-name"/>
                 <button type="submit" class="continue">Update</button>
                 <button class="continue">Cancel</button>
             </form>
         </dialog>
+
+        <div class="footer">The Odin Project "Tic-Tac-Toe" Project by minglee (2024)</div>
 
         <script src="./scripts.js"></script>
     </body>

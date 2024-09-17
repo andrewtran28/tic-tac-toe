@@ -1,4 +1,5 @@
 const GameBoard = (() => {
+
     const gameCont = document.querySelector(".game-container");
     const roundScore = document.querySelector("#round");
     const player1Score = document.querySelector("#player1");
@@ -35,6 +36,18 @@ const GameBoard = (() => {
         for (let i = 0; i < board.length; i++) {
             board[i] = " ";
         }
+    }
+
+    const getGameBoard = () => {
+        gameCont.innerHTML = "";
+        board.forEach((item, index) => {
+            const cell = document.createElement("div");
+            cell.classList.add('cell');
+            cell.textContent = item;
+            cell.id = index;
+            cell.addEventListener("click", addMarker);
+            gameCont.appendChild(cell);
+        });
     }
 
     const addMarker = (e) => {
@@ -102,18 +115,6 @@ const GameBoard = (() => {
             switchPlayer();
         }
     };
-
-    const getGameBoard = () => {
-        gameCont.innerHTML = "";
-        board.forEach((item, index) => {
-            const cell = document.createElement("div");
-            cell.classList.add('cell');
-            cell.textContent = item;
-            cell.id = index;
-            cell.addEventListener("click", addMarker);
-            gameCont.appendChild(cell);
-        });
-    }
 
     const scoreboard = () => {
         roundScore.textContent = "Round: " + round;
